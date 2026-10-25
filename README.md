@@ -7,5 +7,3 @@ Playable web build of **Project:IDOL**, an idol-management card roguelite made b
 The game's interface is plain HTML / CSS / JS that normally runs inside Unity through WebView2. This repository is that same page set served directly in the browser (built from `Assets/StreamingAssets/Starchain/` of the Unity project, `main` @ `09f3fc3`). Progress is kept in your browser only.
 
 Best on desktop at 16:9. Case study: https://suzyeth.github.io/projects/idol.html
-
-Art, card illustrations, voice and the battle engine are by teammates; all rights reserved by the team.
