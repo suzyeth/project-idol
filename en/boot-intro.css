@@ -1,0 +1,51 @@
+/* Boot intro 「天降」 (boot-intro.js). Everything is scoped to #starchain-boot, which sits above the whole page
+   (the city frame is z-index 100, the startup cover body::after 1000) until it removes itself. */
+#starchain-boot {
+	--film: linear-gradient(90deg, #80e0ed, #8196dc 20%, #b096e3 40%, #e7b6e0 55%, #b8bce9 69%, #92cfe5 85%, #80e0ed);
+	position: fixed; inset: 0; z-index: 2000; overflow: hidden; background: #000; cursor: default; user-select: none;
+	contain: strict;
+}
+#starchain-boot.is-city { background: transparent; }
+/* first-draw warm-up: the login scene behind a 99.6% black, so it is drawn once without being seen */
+#starchain-boot.is-warm, #starchain-boot.is-warm .night { background: rgba(0, 0, 0, .996); }
+#starchain-boot .box { position: absolute; overflow: hidden; pointer-events: none; contain: layout paint; }
+#starchain-boot .box > *, #starchain-boot .layer > * { position: absolute; }
+#starchain-boot .layer { inset: 0; }
+#starchain-boot canvas.draw { left: 0; top: 0; width: 100%; height: 100%; }
+#starchain-boot .world { will-change: transform; }
+#starchain-boot .night { inset: -6%; background: #000; }
+#starchain-boot .edge { left: 0; right: 0; top: 0; height: 2px; margin-top: -1px; background: var(--film); box-shadow: 0 0 12px 2px rgba(150, 200, 255, .9), 0 0 44px 6px rgba(190, 160, 255, .45); opacity: 0; will-change: transform, opacity; }
+/* drifting dust: moved by transform (composited), never by background-position (a full-screen repaint every frame) */
+#starchain-boot .dust { left: 0; right: 0; opacity: 0; will-change: transform, opacity; }
+#starchain-boot .dust.d1 { top: -160px; bottom: 0; background: radial-gradient(circle, rgba(255, 255, 255, .55) 0 1px, transparent 1.6px) 0 0 / 140px 160px; }
+#starchain-boot .dust.d2 { top: -210px; bottom: 0; background: radial-gradient(circle, rgba(255, 255, 255, .3) 0 1px, transparent 1.5px) 0 0 / 230px 210px; }
+#starchain-boot .lines { mix-blend-mode: plus-lighter; }
+#starchain-boot .slice { position: absolute; transform-origin: 50% 100%; will-change: transform, opacity; opacity: 0; }
+#starchain-boot .slice canvas { display: block; width: 100%; height: 100%; }
+#starchain-boot .flash { inset: 0; opacity: 0; background: radial-gradient(ellipse 60% 55% at 50% 45%, rgba(255, 255, 255, .9), rgba(220, 230, 255, .3) 45%, transparent 75%); mix-blend-mode: plus-lighter; }
+#starchain-boot .logo { left: 0; top: 0; transform-origin: 0 0; opacity: 0; will-change: transform, opacity; }
+#starchain-boot .logo::before { content: ""; position: absolute; inset: 8% -6% 9%; z-index: -1; background: radial-gradient(ellipse at 50% 48%, rgba(6, 10, 30, .92) 5%, rgba(11, 16, 42, .7) 38%, rgba(11, 16, 42, 0) 73%); opacity: var(--shade, 0); filter: blur(7px); transform: scale(1.12); }
+#starchain-boot .logo canvas { display: block; width: 100%; height: auto; }
+#starchain-boot .logo canvas.shine { position: absolute; left: 0; top: 0; opacity: 0; mix-blend-mode: plus-lighter; }
+#starchain-boot .flare { mix-blend-mode: screen; visibility: hidden; }
+#starchain-boot .flare i { position: absolute; left: 0; top: 0; opacity: 0; border-radius: 50%; will-change: transform, opacity; }
+#starchain-boot .flare .core { width: 760px; height: 760px; margin: -380px; background: radial-gradient(closest-side, #fff 0 6%, rgba(232, 244, 255, .85) 14%, rgba(150, 205, 255, .35) 34%, rgba(120, 120, 230, .12) 58%, transparent); }
+#starchain-boot .flare .streak { width: 2600px; height: 34px; margin: -17px -1300px; background: radial-gradient(closest-side, rgba(255, 255, 255, .95), rgba(128, 224, 237, .6) 30%, rgba(129, 150, 220, .25) 65%, transparent); }
+#starchain-boot .flare .g1 { width: 220px; height: 220px; margin: -110px; background: radial-gradient(closest-side, transparent 62%, rgba(128, 224, 237, .5) 72%, rgba(128, 224, 237, .12) 86%, transparent); }
+#starchain-boot .flare .g2 { width: 120px; height: 120px; margin: -60px; background: radial-gradient(closest-side, rgba(150, 240, 200, .38), rgba(150, 240, 200, .08) 70%, transparent); }
+#starchain-boot .flare .g3 { width: 380px; height: 380px; margin: -190px; background: radial-gradient(closest-side, transparent 74%, rgba(176, 150, 227, .35) 82%, rgba(231, 182, 224, .14) 92%, transparent); }
+#starchain-boot .marks { font: 500 10px/1 "SF Mono", "Cascadia Mono", Consolas, monospace; letter-spacing: .3em; color: rgba(235, 238, 248, .42); }
+#starchain-boot .marks i { width: 16px; height: 16px; border: 0 solid currentColor; }
+#starchain-boot .marks i:nth-of-type(1) { left: 2%; top: 4.5%; border-width: 1px 0 0 1px; } #starchain-boot .marks i:nth-of-type(2) { right: 2%; top: 4.5%; border-width: 1px 1px 0 0; }
+#starchain-boot .marks i:nth-of-type(3) { left: 2%; bottom: 4.5%; border-width: 0 0 1px 1px; } #starchain-boot .marks i:nth-of-type(4) { right: 2%; bottom: 4.5%; border-width: 0 1px 1px 0; }
+#starchain-boot .marks .tl { left: calc(2% + 26px); top: calc(4.5% + 4px); } #starchain-boot .marks .tr { right: calc(2% + 26px); top: calc(4.5% + 4px); font-variant-numeric: tabular-nums; }
+#starchain-boot .marks .bl { left: calc(2% + 26px); bottom: calc(4.5% + 4px); }
+/* while the first draws happen under the black, a small blinking block says the boot is alive (opacity only) */
+#starchain-boot .marks .bl::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 10px; vertical-align: 1px; background: currentColor; animation: sb-blink 1s steps(2, jump-none) infinite; }
+#starchain-boot.is-running .marks .bl::after { animation: none; opacity: 0; }
+@keyframes sb-blink { 50% { opacity: 0; } } #starchain-boot .marks .br { right: calc(2% + 26px); bottom: calc(4.5% + 4px); }
+#starchain-boot .fog { inset: 0; opacity: 0; background: #f6f7fc; }
+#starchain-boot .cloud { inset: 0; opacity: 0; }
+#starchain-boot .cloud i { position: absolute; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 255, 255, .95), rgba(240, 244, 255, .6) 45%, transparent); }
+#starchain-boot .cloud i:nth-child(1) { left: -20%; top: 10%; width: 80%; height: 90%; } #starchain-boot .cloud i:nth-child(2) { left: 40%; top: -15%; width: 90%; height: 80%; }
+#starchain-boot .cloud i:nth-child(3) { left: 15%; top: 45%; width: 85%; height: 85%; } #starchain-boot .cloud i:nth-child(4) { left: 60%; top: 40%; width: 60%; height: 70%; }

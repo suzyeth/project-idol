@@ -1,0 +1,96 @@
+/* Game touch surfaces: allow native scrolling, but never browser page zoom.
+ * Apply to every element so nested scrolling panels also exclude pinch-zoom.
+ * Component rules such as card touch-action:none keep their higher specificity. */
+* { touch-action: pan-x pan-y; -webkit-tap-highlight-color: transparent; }
+*, *::before, *::after { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+html, body { overscroll-behavior: none; }
+input:not([type=button],[type=submit],[type=reset],[type=checkbox],[type=radio],[type=range],[type=color],[type=file],[type=image]), textarea, [contenteditable]:not([contenteditable="false"]), [contenteditable]:not([contenteditable="false"]) * {
+    -webkit-user-select: text; user-select: text; -webkit-touch-callout: default;
+}
+.sc-top,.sc-bottom,.sc-motion-controls{display:none!important}
+/* The WebView is a fixed game viewport, not a scrollable document. */
+html,body{margin:0;width:100%;height:100%;overflow:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{position:fixed;inset:0}
+#starchain-motion-lab{position:fixed;inset:0;overflow:hidden}
+#starchain-motion-lab .sc-product{height:100%}
+#starchain-motion-lab .sc-stage{height:100%;min-height:0;aspect-ratio:auto}
+#starchain-motion-lab .sc-content{--scroll-axis:y;align-self:center;box-sizing:border-box;max-height:100%;overflow-x:hidden;overflow-y:auto;touch-action:none;overscroll-behavior:contain;padding-top:48px;padding-bottom:48px}
+@container(max-width:620px){#starchain-motion-lab .sc-stage{display:flex;align-items:center}#starchain-motion-lab .sc-content{width:100%}}
+#starchain-motion-lab .sc-light-return-zone{position:absolute;inset:0 auto 0 0;z-index:5;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;outline:none;cursor:default;touch-action:manipulation}
+#starchain-motion-lab .sc-transitioning .sc-light-return-zone{pointer-events:none}
+#starchain-motion-lab .sc-conduit{stroke-width:3.2;opacity:.95;stroke-dasharray:52 12 8 428 30 10 6 454}
+#starchain-motion-lab .sc-conduit.alt{stroke-width:3.5}
+/* Snapshot the old palette once; the incoming view stays live. Avoid hundreds of paint transitions. */
+html{view-transition-name:none}
+#starchain-motion-lab .sc-theme-composited,
+#starchain-motion-lab .sc-theme-composited .sc-stage,
+#starchain-motion-lab .sc-theme-composited .sc-art svg *,
+#starchain-motion-lab .sc-theme-composited .sc-content *{transition-property:transform,opacity!important;transition-delay:0ms!important}
+::view-transition{pointer-events:none}
+::view-transition-group(starchain-theme){animation:none}
+::view-transition-image-pair(starchain-theme){isolation:isolate}
+::view-transition-new(starchain-theme){z-index:1;animation:none;mix-blend-mode:normal}
+::view-transition-old(starchain-theme){z-index:2;mix-blend-mode:normal;animation:sc-palette-out var(--sc-color-duration,900ms) cubic-bezier(.45,0,.55,1) both}
+@keyframes sc-palette-out{from{opacity:1}to{opacity:0}}
+/* Compact interaction accents. Animate transforms/opacity, not SVG paint values. */
+#starchain-motion-lab .sc-submit{--hover-accent:#00d1d6;transition:transform 180ms ease!important}
+#starchain-motion-lab .sc-dark .sc-submit{--hover-accent:#e7ee10}
+#starchain-motion-lab .sc-submit:before{content:'';position:absolute;inset:auto 23% 0 0;height:3px;background:var(--hover-accent);transform:scaleX(0);transform-origin:left;z-index:4;transition:transform 300ms cubic-bezier(.16,1,.3,1)}
+#starchain-motion-lab .sc-submit:is(:hover,:focus-visible):before{transform:scaleX(1)}
+#starchain-motion-lab .sc-submit:is(:hover,:focus-visible){transform:translateY(-3px)}
+#starchain-motion-lab .sc-submit:active{transform:translateY(1px) scale(.99)}
+#starchain-motion-lab .sc-submit .sc-arrow{transition:transform 260ms cubic-bezier(.16,1,.3,1)!important}
+#starchain-motion-lab .sc-submit:is(:hover,:focus-visible) .sc-arrow{transform:translate(5px,-5px)}
+#starchain-motion-lab .sc-hover-pixels{position:absolute;inset:0 23% 0 0;z-index:1;opacity:0;pointer-events:none;background:linear-gradient(90deg,transparent 80%,var(--hover-accent) 80% 83%,transparent 83% 87%,#e9008b 87% 90%,transparent 90%);transform:translateX(-100%)}
+#starchain-motion-lab .sc-submit:is(:hover,:focus-visible) .sc-hover-pixels{animation:sc-hover-data 500ms cubic-bezier(.2,.65,.2,1) both}
+@keyframes sc-hover-data{0%{opacity:0;transform:translateX(-100%)}20%{opacity:.25}70%{opacity:.25}100%{opacity:0;transform:translateX(105%)}}
+#starchain-motion-lab .sc-options{position:relative;isolation:isolate;gap:6px;padding:4px;background:#dce3e140;border:1px solid #aab5b04d}
+#starchain-motion-lab .sc-options label,#starchain-motion-lab .sc-options label:has(:checked){position:relative;z-index:1;flex:1;justify-content:center;background:transparent!important;border-color:transparent!important;white-space:nowrap}
+#starchain-motion-lab .sc-gender-slider{position:absolute;top:4px;left:0;bottom:4px;z-index:0;background:#dcf4ed;border:1px solid #00a5ad;pointer-events:none;transition:transform 320ms cubic-bezier(.16,1,.3,1)!important}
+#starchain-motion-lab .sc-dark .sc-gender-slider{background:#39303b;border-color:#f000a8}
+#starchain-motion-lab .sc-options input[type=radio]{appearance:none;display:grid;place-items:center;border:1px solid currentColor;border-radius:50%;color:#00a5ad;background:transparent}
+#starchain-motion-lab .sc-dark .sc-options input[type=radio]{color:#e7ee10}
+#starchain-motion-lab .sc-options input[type=radio]:after{content:'';width:8px;height:8px;border-radius:50%;background:currentColor;transform:scale(0);transition:transform 220ms cubic-bezier(.2,1.4,.4,1)!important}
+#starchain-motion-lab .sc-options input[type=radio]:checked:after{transform:scale(1)}
+#starchain-motion-lab .sc-options input:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+#starchain-motion-lab .sc-data-flow{position:absolute;inset:0;z-index:6;overflow:hidden;pointer-events:none;contain:layout paint;view-transition-name:starchain-data}
+#starchain-motion-lab .sc-data-spine{position:absolute;top:-20%;bottom:-20%;left:0;width:2px;background:#e7ee10;opacity:0;box-shadow:-8px 0 0 #00ccd055,8px 0 0 #ed009355}
+#starchain-motion-lab .sc-data-packet{position:absolute;left:0;height:3px;background:var(--packet-color);opacity:0;pointer-events:none}
+#starchain-motion-lab .sc-data-packet.sc-data-code{height:auto;background:none;color:var(--packet-color);font:10px monospace;letter-spacing:2px}
+::view-transition-group(starchain-data){z-index:3;animation:none}
+::view-transition-old(starchain-data){display:none}
+::view-transition-new(starchain-data){animation:none;mix-blend-mode:normal}
+@media(prefers-reduced-motion:reduce){#starchain-motion-lab .sc-hover-pixels{animation:none!important}#starchain-motion-lab .sc-gender-slider,#starchain-motion-lab .sc-arrow,#starchain-motion-lab .sc-submit{transition:none!important}}
+
+/* Landscape phones have less vertical space than the desktop registration form. */
+@media (max-height:540px) {
+ #starchain-motion-lab .sc-content{padding-top:16px;padding-bottom:16px;min-height:0}
+ #starchain-motion-lab .sc-mobile-title{font-size:24px;line-height:1.25;margin-bottom:12px}
+ #starchain-motion-lab .sc-mobile-title:after{height:5px;margin-top:8px}
+ #starchain-motion-lab .sc-panels{min-height:0}
+ #starchain-motion-lab .sc-form{row-gap:12px}
+ #starchain-motion-lab .sc-input-shell input[type=text]{height:40px;font-size:20px}
+ #starchain-motion-lab .sc-options label{min-height:40px}
+ #starchain-motion-lab .sc-submit{height:44px;min-height:44px;margin-top:0}
+ #starchain-motion-lab .sc-status{margin-top:0}
+ #starchain-motion-lab .sc-button-copy{padding-top:4px;padding-bottom:4px}
+ #starchain-motion-lab .sc-button-text{font-size:20px}
+ #starchain-motion-lab .sc-button-en{font-size:10px}
+}
+/* Reference landscape registration layout: scale artwork and HTML controls
+ * together, independently of device density, transient viewport size or IME. */
+.starchain-mobile-viewport #starchain-motion-lab .sc-stage{position:absolute;left:var(--login-left);top:var(--login-top);width:1200px;height:520px;min-height:0;display:grid;grid-template-columns:46% 54%;container-type:size;transform-origin:0 0;transform:scale(var(--login-scale))}
+.starchain-mobile-viewport #starchain-motion-lab .sc-art{left:0;width:100%;height:100%;opacity:1}
+.starchain-mobile-viewport #starchain-motion-lab .sc-content{grid-column:2;width:auto;padding:16px 28px 16px 18px;translate:0 calc(-1 * var(--login-keyboard-shift,0px))}
+.starchain-mobile-viewport #starchain-motion-lab .sc-mobile-title{font-size:24px;line-height:1.25;margin:0 0 12px}
+.starchain-mobile-viewport #starchain-motion-lab .sc-mobile-title:after{height:5px;margin-top:8px}
+.starchain-mobile-viewport #starchain-motion-lab .sc-panels{min-height:0}
+.starchain-mobile-viewport #starchain-motion-lab .sc-form{font-size:18px;row-gap:12px}
+.starchain-mobile-viewport #starchain-motion-lab .sc-input-shell input[type=text]{height:40px;font-size:20px}
+.starchain-mobile-viewport #starchain-motion-lab .sc-options label{min-height:40px}
+.starchain-mobile-viewport #starchain-motion-lab .sc-submit{height:44px;min-height:44px;margin-top:0}
+.starchain-mobile-viewport #starchain-motion-lab .sc-status{margin-top:0}
+.starchain-mobile-viewport #starchain-motion-lab .sc-button-copy{padding-top:4px;padding-bottom:4px}
+.starchain-mobile-viewport #starchain-motion-lab .sc-button-text{font-size:20px}
+.starchain-mobile-viewport #starchain-motion-lab .sc-button-en{font-size:10px}
+.starchain-mobile-viewport .city-return{left:calc(22px * var(--login-scale));top:calc(20px * var(--login-scale));transform-origin:0 0;scale:var(--login-scale)}

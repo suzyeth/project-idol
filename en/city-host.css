@@ -1,0 +1,24 @@
+.city-frame{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:100;background:#000}.city-frame[hidden]{display:none}
+html:not(.starchain-presented) .city-frame{opacity:0;pointer-events:none}
+html,body{background:#000!important}
+body::after{content:'';position:fixed;inset:0;background:#000;z-index:1000;pointer-events:none;opacity:1}
+html.starchain-presented body::after{opacity:0}
+@media(prefers-reduced-motion:reduce){body::after{transition:none}}
+.city-transit{position:fixed;inset:0;z-index:110;visibility:hidden;pointer-events:none;overflow:hidden}
+.city-transit i{position:absolute;left:0;top:0;bottom:0;width:15vw;background:linear-gradient(90deg,transparent,#9cdae529 75%,#d2c4ee66 97%,transparent);will-change:transform,opacity}
+.city-return{position:fixed;left:22px;top:20px;z-index:20;padding:8px 0;border:0;border-radius:0;background:transparent;color:#344058;font:16px 'Fusion Pixel','Microsoft YaHei',monospace;cursor:pointer;transition:color 160ms,transform 160ms}.city-return:hover{color:#00a9ae;transform:translateX(-2px)}.city-return:focus-visible{outline:none;text-decoration:underline;text-underline-offset:6px}.city-return[hidden]{display:none}body:has(.sc-dark) .city-return{color:#c3b2e8}
+#starchain-motion-lab .sc-submit{background:#202c43;color:#e9f5ff;--hover-accent:#98dce9}#starchain-motion-lab .sc-button-side{background:linear-gradient(125deg,#9ce0e9,#b1a1e2)!important;color:#17253b}
+#starchain-motion-lab .sc-dark .sc-submit{--hover-accent:#c2a2e7}#starchain-motion-lab .sc-options{border-color:#9cafd466}#starchain-motion-lab .sc-dark .sc-gender-slider{background:#34344e;border-color:#b8a1e5}
+#starchain-motion-lab .sc-shutter{background:#11182d!important}#starchain-motion-lab .sc-streak{background:linear-gradient(90deg,transparent,#91d9e9,#b6a2ef,transparent)!important}#starchain-motion-lab .sc-loading{color:#c7d9f3!important}
+#starchain-motion-lab .sc-mobile-title:after,#starchain-motion-lab .sc-dark .sc-mobile-title:after{background:linear-gradient(90deg,#26374c 0 2%,#8edce7 2%,#b7a2e8 91%,transparent 91% 94%,#d5b0df 94% 96%,transparent 96% 98%,#d5b0df 98%)}
+body:has(.sc-transitioning) .city-return{display:none!important}
+#starchain-motion-lab .sc-shutter,#starchain-motion-lab .sc-dark .sc-shutter{background:#000!important}
+#starchain-motion-lab .sc-diagonal-accent,#starchain-motion-lab .sc-streak{display:none!important}
+.city-frame{background:#000}
+/* The covered registration scene stays mounted, without running its 400+
+   ambient animations behind the city. Route code resumes before Intro.play. */
+#starchain-motion-lab.starchain-animations-suspended[inert] .sc-product *,
+#starchain-motion-lab.starchain-animations-suspended[inert] .sc-product *::before,
+#starchain-motion-lab.starchain-animations-suspended[inert] .sc-product *::after{animation-play-state:paused!important;transition:none!important}
+/* Entry flight layer (city-flight-host.js): above the light band, below nothing interactive. */
+.city-flight{position:fixed;inset:0;z-index:111;pointer-events:none;overflow:hidden}.city-flight canvas{position:absolute;inset:0;width:100%;height:100%}

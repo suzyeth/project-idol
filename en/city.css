@@ -1,0 +1,34 @@
+/* Game touch surfaces: allow native scrolling, but never browser page zoom.
+ * Apply to every element so nested scrolling panels also exclude pinch-zoom.
+ * Component rules such as card touch-action:none keep their higher specificity. */
+* { touch-action: pan-x pan-y; -webkit-tap-highlight-color: transparent; }
+*, *::before, *::after { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+html, body { overscroll-behavior: none; }
+input:not([type=button],[type=submit],[type=reset],[type=checkbox],[type=radio],[type=range],[type=color],[type=file],[type=image]), textarea, [contenteditable]:not([contenteditable="false"]), [contenteditable]:not([contenteditable="false"]) * {
+    -webkit-user-select: text; user-select: text; -webkit-touch-callout: default;
+}
+/* The reference artwork, logo and entry share one uniformly scaled canvas. */
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#000}
+.scene{position:absolute;left:50%;top:50%;width:1152px;height:481.786px;aspect-ratio:2580/1079;transform:translate(-50%,-50%) scale(var(--scene-scale,1));transform-origin:center;border-radius:18px;overflow:hidden}
+.scene>.background{object-fit:contain;object-position:center}.scene>.logo{width:var(--size);max-width:none}
+/* Keep the new 16:9 illustration complete; the original city retains its wide composition. */
+html[data-login-background="art"] .scene{height:648px;aspect-ratio:16/9}
+.scene{z-index:1;border-radius:0;box-shadow:none}
+.scene>.logo{z-index:2}
+.city-light-film{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;mix-blend-mode:screen;opacity:var(--film-strength,.24)}
+.city-light-film i{position:absolute;inset:-35%;background:radial-gradient(ellipse at 30% 50%,transparent 25%,#a6e8f477 30%,transparent 36%,#ab96e955 43%,transparent 51%);transform:rotate(-22deg);animation:film-drift var(--film-period,16s) ease-in-out infinite alternate;will-change:transform,opacity}
+.city-light-film i:nth-child(2){background:linear-gradient(115deg,transparent 32%,#c3efe711 42%,#ced4efaa 46%,transparent 49%,#bba6ed44 55%,transparent 65%);animation-duration:calc(var(--film-period,16s) * 1.37);animation-delay:-8s}
+.city-light-film i:nth-child(3){background:radial-gradient(ellipse at 70% 45%,transparent 18%,#d2b3e944 27%,transparent 33%);animation-direction:alternate-reverse;animation-delay:-5s}
+@keyframes film-drift{0%{transform:translate(-10%,5%) rotate(-22deg) scale(1);opacity:.35}50%{opacity:.8}100%{transform:translate(12%,-7%) rotate(-8deg) scale(1.16);opacity:.5}}
+@media(prefers-reduced-motion:reduce){.city-light-film i{animation:none!important;opacity:.25}}
+.scene>.background{transform-origin:50% 58%}
+.city-paused *,.city-paused *::after{animation-play-state:paused!important}
+.scene .game-entry{transition:opacity 200ms,filter 200ms;min-width:0;max-width:none;gap:9px;padding:12px 0 10px}.scene .game-entry:hover{filter:brightness(1.28)}
+.entry-rule{background:linear-gradient(90deg,transparent,#92deed,#b5a1f0)}
+.entry-caption{color:#c2b7ed}.entry-emblem{filter:drop-shadow(0 0 5px #a296d5)}
+.scene .entry-label{font-size:21.888px}.scene .entry-caption{font-size:7.488px}.scene .entry-row{gap:19.584px}.scene .entry-emblem{width:24px;height:24px}
+.city-light-film.city-film-ready{opacity:1;mix-blend-mode:screen}
+.city-film-ready>i{display:none}
+.city-film-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;transform-origin:50% 58%}
+/* Lets the title's airship and stars fly past the viewBox edges (city-flight.js). */
+.logo>svg{overflow:visible}
